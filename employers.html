@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post a Role — Flōk for Employers</title>
+  <meta name="description" content="Reach the UK's most motivated remote job seekers. One annual fee, unlimited roles, no auto-renewal. From £499/year.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1a1814; --paper: #f5f2eb; --warm-mid: #e8e2d4;
+      --accent: #2d5a3d; --accent-light: #4a8a5f; --accent-pale: #e8f0ea;
+      --rust: #c4622d; --rust-pale: #f5ede6;
+      --muted: #7a7469; --border: rgba(26,24,20,0.12); --white: #fff;
+    }
+    body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); }
+
+    .nav { display:flex; align-items:center; justify-content:space-between; padding:18px 40px; border-bottom:1px solid var(--border); background:var(--paper); position:sticky; top:0; z-index:20; }
+    .nav-logo { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:var(--ink); text-decoration:none; }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex; gap:28px; list-style:none; }
+    .nav-links a { text-decoration:none; color:var(--muted); font-size:14px; transition:color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--ink); font-weight:500; }
+    .nav-cta { background:var(--accent); color:white !important; padding:8px 18px; border-radius:40px; font-size:13px; font-weight:500 !important; }
+
+    /* HERO */
+    .emp-hero { background:var(--ink); padding:64px 40px; text-align:center; }
+    .emp-hero-inner { max-width:680px; margin:0 auto; }
+    .emp-eyebrow { font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:16px; }
+    .emp-headline { font-family:'Playfair Display',serif; font-size:48px; font-weight:700; color:white; line-height:1.05; letter-spacing:-1px; margin-bottom:16px; }
+    .emp-headline em { font-style:italic; color:rgba(255,255,255,0.5); }
+    .emp-sub { font-size:16px; color:rgba(255,255,255,0.55); font-weight:300; line-height:1.7; margin-bottom:32px; }
+    .emp-hero-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    .btn-white { background:white; color:var(--ink); padding:13px 28px; border-radius:40px; font-size:14px; font-weight:500; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; transition:opacity 0.2s; text-decoration:none; display:inline-block; }
+    .btn-white:hover { opacity:0.88; }
+    .btn-ghost { background:transparent; color:rgba(255,255,255,0.7); padding:13px 28px; border-radius:40px; font-size:14px; border:1px solid rgba(255,255,255,0.2); cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; text-decoration:none; display:inline-block; }
+    .btn-ghost:hover { color:white; border-color:rgba(255,255,255,0.5); }
+
+    /* STATS */
+    .stats-strip { background:var(--accent); padding:28px 40px; }
+    .stats-inner { max-width:900px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); }
+    .stat-item { text-align:center; padding:8px 16px; border-right:1px solid rgba(255,255,255,0.15); }
+    .stat-item:last-child { border-right:none; }
+    .stat-n { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; color:white; line-height:1; }
+    .stat-l { font-size:12px; color:rgba(255,255,255,0.6); font-weight:300; margin-top:4px; }
+
+    /* HOW IT WORKS */
+    .how-section { padding:64px 40px; max-width:900px; margin:0 auto; }
+    .section-eyebrow { font-size:11px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; text-align:center; }
+    .section-title { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; color:var(--ink); text-align:center; margin-bottom:8px; }
+    .section-sub { font-size:15px; color:var(--muted); font-weight:300; text-align:center; margin-bottom:40px; }
+    .steps-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .step-card { background:white; border:1px solid var(--border); border-radius:16px; padding:26px 24px; }
+    .step-num { width:36px; height:36px; border-radius:50%; background:var(--accent); color:white; font-size:14px; font-weight:500; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+    .step-title { font-size:15px; font-weight:500; color:var(--ink); margin-bottom:8px; }
+    .step-desc { font-size:13px; color:var(--muted); font-weight:300; line-height:1.6; }
+
+    /* PRICING PREVIEW */
+    .pricing-preview { background:var(--accent-pale); padding:64px 40px; border-top:1px solid rgba(45,90,61,0.1); border-bottom:1px solid rgba(45,90,61,0.1); }
+    .pricing-preview-inner { max-width:820px; margin:0 auto; }
+    .pricing-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:40px; }
+    .pricing-card { background:white; border:1px solid var(--border); border-radius:20px; padding:30px 28px; position:relative; }
+    .pricing-card.featured { border-color:var(--accent); border-width:2px; }
+    .featured-pill { position:absolute; top:-13px; left:50%; transform:translateX(-50%); background:var(--accent); color:white; font-size:11px; font-weight:500; padding:4px 16px; border-radius:20px; white-space:nowrap; }
+    .card-tier { font-size:12px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+    .pricing-card.featured .card-tier { color:var(--accent); }
+    .card-price { font-family:'Playfair Display',serif; font-size:44px; font-weight:700; color:var(--ink); line-height:1; margin-bottom:4px; }
+    .card-period { font-size:13px; color:var(--muted); font-weight:300; margin-bottom:6px; }
+    .card-cph { font-size:13px; font-weight:500; color:var(--accent); background:var(--accent-pale); display:inline-block; padding:4px 12px; border-radius:20px; margin-bottom:20px; }
+    .card-divider { height:1px; background:var(--border); margin-bottom:20px; }
+    .card-features { list-style:none; display:flex; flex-direction:column; gap:9px; margin-bottom:24px; }
+    .card-feature { display:flex; align-items:flex-start; gap:9px; font-size:13px; color:var(--ink); font-weight:300; line-height:1.5; }
+    .feat-check { color:var(--accent); font-weight:500; flex-shrink:0; font-size:12px; margin-top:2px; }
+    .card-btn { width:100%; padding:13px; border-radius:40px; font-size:14px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; border:1px solid var(--border); background:white; color:var(--ink); }
+    .card-btn:hover { border-color:var(--ink); }
+    .card-btn.primary { background:var(--accent); color:white; border-color:var(--accent); }
+    .card-btn.primary:hover { background:var(--accent-light); }
+    .card-renewal { font-size:11px; color:var(--muted); font-weight:300; text-align:center; margin-top:10px; }
+    .pricing-link { text-align:center; margin-top:20px; font-size:14px; color:var(--accent); }
+    .pricing-link a { color:var(--accent); text-decoration:none; font-weight:500; }
+
+    /* POST FORM */
+    .post-section { padding:64px 40px; max-width:680px; margin:0 auto; }
+    .form-title { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--ink); margin-bottom:6px; }
+    .form-sub { font-size:14px; color:var(--muted); font-weight:300; margin-bottom:32px; }
+    .form-group { margin-bottom:20px; }
+    .form-label { font-size:12px; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; display:block; }
+    .form-input, .form-select, .form-textarea { width:100%; padding:12px 16px; border:1px solid var(--border); border-radius:10px; font-size:14px; font-family:'DM Sans',sans-serif; color:var(--ink); background:white; outline:none; font-weight:300; transition:border-color 0.2s; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color:var(--accent); }
+    .form-textarea { height:120px; resize:vertical; line-height:1.6; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .form-hint { font-size:12px; color:var(--accent); font-weight:300; margin-top:6px; }
+    .salary-notice { background:var(--accent-pale); border:1px solid rgba(45,90,61,0.2); border-radius:10px; padding:12px 16px; font-size:13px; color:var(--accent); font-weight:300; margin-bottom:20px; line-height:1.5; }
+    .salary-notice strong { font-weight:500; }
+    .submit-btn { width:100%; padding:14px; background:var(--accent); color:white; border:none; border-radius:40px; font-size:15px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background 0.2s; }
+    .submit-btn:hover { background:var(--accent-light); }
+    .submit-note { font-size:12px; color:var(--muted); font-weight:300; text-align:center; margin-top:12px; line-height:1.5; }
+
+    footer { padding:32px 40px; border-top:1px solid var(--border); }
+    .footer-inner { max-width:1060px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+    .footer-logo { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--ink); text-decoration:none; }
+    .footer-logo span { color:var(--accent); }
+    .footer-note { font-size:12px; color:var(--muted); font-weight:300; }
+
+    @media (max-width:768px) {
+      .emp-headline { font-size:34px; }
+      .stats-inner { grid-template-columns:1fr 1fr; gap:16px; }
+      .steps-grid { grid-template-columns:1fr; }
+      .pricing-grid { grid-template-columns:1fr; }
+      .form-row { grid-template-columns:1fr; }
+      .nav { padding:16px 20px; }
+      .nav-links { display:none; }
+      .how-section, .post-section { padding:40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-logo">We are Fl<span>ō</span>k</a>
+    <ul class="nav-links">
+      <li><a href="/jobs.html">Find jobs</a></li>
+      <li><a href="/employers.html" class="active">Employers</a></li>
+      <li><a href="/about.html">Why Flōk</a></li>
+      <li><a href="/pricing.html">Pricing</a></li>
+      <li><a href="#post" class="nav-cta">Post a role</a></li>
+    </ul>
+  </nav>
+
+  <div class="emp-hero">
+    <div class="emp-hero-inner">
+      <div class="emp-eyebrow">For employers</div>
+      <h1 class="emp-headline">Hire people who <em>want</em> to work for you.</h1>
+      <p class="emp-sub">Flōk connects you with motivated, values-aligned candidates actively looking for remote and flexible roles — people who care about where they work.</p>
+      <div class="emp-hero-btns">
+        <a href="#post" class="btn-white">Post your first role</a>
+        <a href="/pricing.html" class="btn-ghost">See pricing →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item"><div class="stat-n">14k+</div><div class="stat-l">Active job seekers</div></div>
+      <div class="stat-item"><div class="stat-n">68%</div><div class="stat-l">Apply within 48hrs</div></div>
+      <div class="stat-item"><div class="stat-n">£50</div><div class="stat-l">Average cost per hire</div></div>
+      <div class="stat-item"><div class="stat-n">10×</div><div class="stat-l">Cheaper than LinkedIn</div></div>
+    </div>
+  </div>
+
+  <div class="how-section">
+    <div class="section-eyebrow">How it works</div>
+    <div class="section-title">Simple from the start</div>
+    <div class="section-sub">No account setup. No complex dashboards. Fill a form, pay once, go live.</div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-title">Fill in your role</div>
+        <div class="step-desc">Job title, salary range, work arrangement, role description. Takes about 5 minutes. Salary must be shown — that's non-negotiable on Flōk.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-title">Pay once annually</div>
+        <div class="step-desc">One payment covers unlimited roles for 12 months. No per-listing fees, no monthly billing, no auto-renewal. You choose to renew.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-title">Go live &amp; hire</div>
+        <div class="step-desc">Standard listings live within 24 hours. Featured listings within 4 hours. Post as many roles as you need throughout the year.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pricing-preview">
+    <div class="pricing-preview-inner">
+      <div class="section-eyebrow">Pricing</div>
+      <div class="section-title">One fee. All year.</div>
+      <div class="section-sub">No per-listing charges. No surprises. Renew when you're ready.</div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="card-tier">Standard</div>
+          <div class="card-price">£499</div>
+          <div class="card-period">per year · unlimited roles</div>
+          <div class="card-cph">≈ £50 per hire</div>
+          <div class="card-divider"></div>
+          <ul class="card-features">
+            <li class="card-feature"><span class="feat-check">✓</span>Unlimited job postings for 12 months</li>
+            <li class="card-feature"><span class="feat-check">✓</span>Appears in search &amp; job feeds</li>
+            <li class="card-feature"><span class="feat-check">✓</span>Salary transparency badge</li>
+            <li class="card-feature"><span class="feat-check">✓</span>Employer profile page</li>
+            <li class="card-feature"><span class="feat-check">✓</span>No auto-renewal — ever</li>
+          </ul>
+          <button class="card-btn" onclick="document.getElementById('post').scrollIntoView({behavior:'smooth'})">Get started</button>
+          <div class="card-renewal">One payment. No surprises.</div>
+        </div>
+        <div class="pricing-card featured">
+          <div class="featured-pill">Best value for active hirers</div>
+          <div class="card-tier">Featured</div>
+          <div class="card-price">£849</div>
+          <div class="card-period">per year · priority placement</div>
+          <div class="card-cph">≈ £85 per hire · still 4× cheaper than Reed</div>
+          <div class="card-divider"></div>
+          <ul class="card-features">
+            <li class="card-feature"><span class="feat-check">✓</span>Everything in Standard</li>
+            <li class="card-feature"><span class="feat-check">✓</span>Pinned at top of search results</li>
+            <li class="card-feature"><span class="feat-check">✓</span>Featured badge on all listings</li>
+            <li class="card-feature"><span class="feat-check">✓</span>First in job alert emails</li>
+            <li class="card-feature"><span class="feat-check">✓</span>Live within 4 hours</li>
+          </ul>
+          <button class="card-btn primary" onclick="document.getElementById('post').scrollIntoView({behavior:'smooth'})">Get featured</button>
+          <div class="card-renewal">One payment. No surprises.</div>
+        </div>
+      </div>
+      <div class="pricing-link"><a href="/pricing.html">See full pricing comparison →</a></div>
+    </div>
+  </div>
+
+  <div class="post-section" id="post">
+    <div class="form-title">Post your first role</div>
+    <div class="form-sub">Free to enquire. We'll confirm your listing tier and send a payment link before anything goes live.</div>
+    <div class="form-group">
+      <label class="form-label">Job title</label>
+      <input class="form-input" type="text" placeholder="e.g. Head of Communications">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Organisation name</label>
+      <input class="form-input" type="text" placeholder="e.g. Whitley Fund for Nature">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Your email</label>
+      <input class="form-input" type="email" placeholder="you@organisation.org">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Sector</label>
+        <select class="form-select">
+          <option>Charity &amp; NGO</option>
+          <option>CleanTech &amp; Climate</option>
+          <option>B Corp</option>
+          <option>Tech &amp; Product</option>
+          <option>Finance &amp; FinTech</option>
+          <option>Education</option>
+          <option>Health</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contract type</label>
+        <select class="form-select">
+          <option>Permanent</option>
+          <option>Contract</option>
+          <option>Part-time</option>
+          <option>Interim / freelance</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Salary from</label>
+        <input class="form-input" type="text" placeholder="e.g. £45,000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Salary to</label>
+        <input class="form-input" type="text" placeholder="e.g. £55,000">
+      </div>
+    </div>
+    <div class="salary-notice"><strong>Salary transparency is required on Flōk.</strong> All listings must show a salary range. No "competitive salary" — ever. This is how we protect job seekers' time and yours.</div>
+    <div class="form-group">
+      <label class="form-label">Work arrangement</label>
+      <select class="form-select">
+        <option>Full remote</option>
+        <option>Hybrid</option>
+        <option>Flexible hours</option>
+        <option>4-day week</option>
+        <option>Part-time</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Role description</label>
+      <textarea class="form-textarea" placeholder="Tell candidates about the role, what they'll do, and what you're looking for…"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Listing tier</label>
+      <select class="form-select">
+        <option>Standard — £499/year (unlimited roles)</option>
+        <option>Featured — £849/year (priority placement)</option>
+      </select>
+    </div>
+    <button class="submit-btn">Submit role →</button>
+    <div class="submit-note">We'll review your listing and send a payment link within 24 hours.<br>No payment taken until you've approved your listing.</div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <a href="/" class="footer-logo">We are Fl<span>ō</span>k</a>
+      <div class="footer-note">Remote &amp; flexible jobs across the UK · Free for job seekers · Always.</div>
+    </div>
+  </footer>
+
+</body>
+</html>

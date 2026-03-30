@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Remote Jobs — Flōk</title>
+  <meta name="description" content="Search thousands of remote and flexible jobs across the UK. Filter by sector, salary, work type and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1a1814; --paper: #f5f2eb; --warm-mid: #e8e2d4;
+      --accent: #2d5a3d; --accent-light: #4a8a5f; --accent-pale: #e8f0ea;
+      --rust: #c4622d; --rust-pale: #f5ede6;
+      --muted: #7a7469; --border: rgba(26,24,20,0.12); --white: #fff;
+    }
+    body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); }
+
+    .nav { display:flex; align-items:center; justify-content:space-between; padding:18px 40px; border-bottom:1px solid var(--border); background:var(--paper); position:sticky; top:0; z-index:20; }
+    .nav-logo { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:var(--ink); text-decoration:none; }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex; gap:28px; list-style:none; }
+    .nav-links a { text-decoration:none; color:var(--muted); font-size:14px; transition:color 0.2s; }
+    .nav-links a:hover { color:var(--ink); }
+    .nav-links a.active { color:var(--ink); font-weight:500; }
+    .nav-cta { background:var(--ink); color:var(--paper) !important; padding:8px 18px; border-radius:40px; font-size:13px; font-weight:500 !important; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background 0.2s; }
+    .nav-cta:hover { background:var(--accent) !important; }
+
+    .search-header { background:var(--ink); padding:36px 40px; }
+    .search-header-inner { max-width:1060px; margin:0 auto; }
+    .search-title { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; color:white; margin-bottom:6px; }
+    .search-title em { font-style:italic; color:rgba(255,255,255,0.55); }
+    .search-sub { font-size:14px; color:rgba(255,255,255,0.5); font-weight:300; margin-bottom:22px; }
+    .search-bar { display:flex; background:white; border-radius:50px; overflow:hidden; padding:6px 6px 6px 22px; align-items:center; gap:10px; max-width:680px; }
+    .search-input { flex:1; border:none; outline:none; font-size:15px; font-family:'DM Sans',sans-serif; color:var(--ink); background:transparent; font-weight:300; }
+    .search-input::placeholder { color:var(--muted); }
+    .search-divider { width:1px; height:22px; background:var(--border); flex-shrink:0; }
+    .search-select { border:none; outline:none; font-size:13px; font-family:'DM Sans',sans-serif; color:var(--muted); background:transparent; cursor:pointer; padding:0 8px; }
+    .search-btn { background:var(--accent); color:white; border:none; border-radius:40px; padding:10px 22px; font-size:14px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background 0.2s; flex-shrink:0; }
+    .search-btn:hover { background:var(--accent-light); }
+
+    .main-layout { display:grid; grid-template-columns:240px 1fr; gap:28px; max-width:1060px; margin:0 auto; padding:28px 40px 60px; align-items:start; }
+
+    .filters-panel { position:sticky; top:74px; }
+    .filters-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+    .filters-title { font-size:13px; font-weight:500; color:var(--ink); }
+    .filters-clear { font-size:12px; color:var(--accent); cursor:pointer; background:none; border:none; font-family:'DM Sans',sans-serif; }
+    .filter-group { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:18px 20px; margin-bottom:10px; }
+    .filter-group-title { font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
+    .filter-option { display:flex; align-items:center; gap:10px; margin-bottom:9px; cursor:pointer; }
+    .filter-option:last-child { margin-bottom:0; }
+    .filter-checkbox { width:16px; height:16px; border-radius:4px; border:1.5px solid var(--border); background:white; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.15s; cursor:pointer; font-size:10px; color:white; font-weight:500; }
+    .filter-checkbox.checked { background:var(--accent); border-color:var(--accent); }
+    .filter-label { font-size:13px; color:var(--ink); font-weight:300; flex:1; }
+    .filter-count { font-size:11px; color:var(--muted); background:var(--warm-mid); padding:1px 7px; border-radius:10px; }
+    .salary-slider { width:100%; accent-color:var(--accent); cursor:pointer; margin-bottom:8px; }
+    .salary-labels { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); font-weight:300; }
+
+    .results-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+    .results-count { font-size:15px; font-weight:500; color:var(--ink); }
+    .results-count span { color:var(--muted); font-weight:300; font-size:13px; }
+    .sort-select { border:1px solid var(--border); border-radius:30px; padding:7px 14px; font-size:13px; font-family:'DM Sans',sans-serif; color:var(--ink); background:white; cursor:pointer; outline:none; }
+
+    .active-filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    .active-tag { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:var(--accent); background:var(--accent-pale); border:1px solid rgba(45,90,61,0.2); padding:4px 10px; border-radius:20px; cursor:pointer; }
+    .active-tag:hover { opacity:0.75; }
+
+    .jobs-list { display:flex; flex-direction:column; gap:10px; }
+    .job-card { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:22px 24px; cursor:pointer; transition:border-color 0.2s,transform 0.15s,box-shadow 0.2s; position:relative; overflow:hidden; text-decoration:none; display:block; color:inherit; animation:fadeUp 0.3s ease both; }
+    .job-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:var(--accent); transform:scaleY(0); transform-origin:bottom; transition:transform 0.2s; }
+    .job-card:hover { border-color:var(--accent); transform:translateY(-2px); box-shadow:0 6px 20px rgba(26,24,20,0.08); }
+    .job-card:hover::before { transform:scaleY(1); }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .job-card:nth-child(1){animation-delay:0.05s} .job-card:nth-child(2){animation-delay:0.1s} .job-card:nth-child(3){animation-delay:0.15s} .job-card:nth-child(4){animation-delay:0.2s} .job-card:nth-child(5){animation-delay:0.25s} .job-card:nth-child(6){animation-delay:0.3s}
+    .job-card-row { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+    .job-left { display:flex; align-items:flex-start; gap:14px; flex:1; min-width:0; }
+    .job-logo { width:44px; height:44px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; border:1px solid var(--border); }
+    .job-logo-green { background:var(--accent-pale); }
+    .job-logo-rust { background:var(--rust-pale); }
+    .job-logo-warm { background:var(--warm-mid); }
+    .job-info { flex:1; min-width:0; }
+    .job-title { font-size:15px; font-weight:500; color:var(--ink); margin-bottom:3px; }
+    .job-org { font-size:13px; color:var(--muted); font-weight:300; margin-bottom:10px; }
+    .job-tags { display:flex; gap:6px; flex-wrap:wrap; }
+    .job-tag { font-size:11px; padding:3px 9px; border-radius:20px; border:1px solid var(--border); color:var(--muted); background:var(--paper); }
+    .job-tag-green { background:var(--accent-pale); color:var(--accent); border-color:rgba(45,90,61,0.2); font-weight:500; }
+    .job-right { display:flex; flex-direction:column; align-items:flex-end; gap:8px; flex-shrink:0; }
+    .job-salary { font-size:14px; font-weight:500; color:var(--ink); white-space:nowrap; }
+    .job-badge { font-size:11px; font-weight:500; padding:3px 9px; border-radius:20px; white-space:nowrap; }
+    .badge-new { background:var(--rust-pale); color:var(--rust); }
+    .badge-remote { background:var(--accent-pale); color:var(--accent); }
+    .badge-flex { background:var(--warm-mid); color:var(--muted); }
+    .job-posted { font-size:11px; color:var(--muted); font-weight:300; }
+    .job-card.featured { border-color:rgba(45,90,61,0.3); background:linear-gradient(to right,var(--accent-pale),white); }
+    .featured-label { font-size:10px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+
+    .pagination { display:flex; align-items:center; justify-content:center; gap:8px; margin-top:28px; }
+    .page-btn { width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:white; font-size:13px; color:var(--ink); cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.15s; display:flex; align-items:center; justify-content:center; }
+    .page-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .page-btn.active { background:var(--ink); color:white; border-color:var(--ink); }
+    .page-dots { color:var(--muted); font-size:13px; }
+
+    footer { padding:32px 40px; border-top:1px solid var(--border); }
+    .footer-inner { max-width:1060px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+    .footer-logo { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--ink); text-decoration:none; }
+    .footer-logo span { color:var(--accent); }
+    .footer-note { font-size:12px; color:var(--muted); font-weight:300; }
+
+    @media (max-width:768px) {
+      .main-layout { grid-template-columns:1fr; padding:20px; }
+      .filters-panel { position:static; }
+      .search-header { padding:24px 20px; }
+      .nav { padding:16px 20px; }
+      .nav-links { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-logo">We are Fl<span>ō</span>k</a>
+    <ul class="nav-links">
+      <li><a href="/jobs.html" class="active">Find jobs</a></li>
+      <li><a href="/employers.html">Employers</a></li>
+      <li><a href="/about.html">Why Flōk</a></li>
+      <li><a href="/pricing.html">Pricing</a></li>
+      <li><a href="/employers.html" class="nav-cta">Post a role</a></li>
+    </ul>
+  </nav>
+
+  <div class="search-header">
+    <div class="search-header-inner">
+      <h1 class="search-title">Find your next <em>remote role.</em></h1>
+      <p class="search-sub">Thousands of remote &amp; flexible roles across the UK — free to search, free to apply</p>
+      <div class="search-bar">
+        <input class="search-input" type="text" placeholder="Job title, skill, or keyword…">
+        <div class="search-divider"></div>
+        <select class="search-select">
+          <option>All of UK</option>
+          <option>Full remote</option>
+          <option>Hybrid</option>
+          <option>London</option>
+          <option>Manchester</option>
+        </select>
+        <div class="search-divider"></div>
+        <select class="search-select">
+          <option>Any type</option>
+          <option>Full-time</option>
+          <option>Part-time</option>
+          <option>Contract</option>
+        </select>
+        <button class="search-btn">Search</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-layout">
+    <aside class="filters-panel">
+      <div class="filters-header">
+        <span class="filters-title">Filters</span>
+        <button class="filters-clear" onclick="clearFilters()">Clear all</button>
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-title">Work type</div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox checked">✓</div><span class="filter-label">Full remote</span><span class="filter-count">847</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">Hybrid</span><span class="filter-count">1,204</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">Flexible hours</span><span class="filter-count">612</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">4-day week</span><span class="filter-count">94</span></div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-title">Contract</div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox checked">✓</div><span class="filter-label">Permanent</span><span class="filter-count">1,580</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">Contract</span><span class="filter-count">440</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">Part-time</span><span class="filter-count">398</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">Interim / freelance</span><span class="filter-count">215</span></div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-title">Sector</div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox checked">✓</div><span class="filter-label">Charity &amp; NGO</span><span class="filter-count">312</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">CleanTech &amp; Climate</span><span class="filter-count">187</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">B Corps</span><span class="filter-count">143</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">Tech &amp; Product</span><span class="filter-count">528</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">Finance &amp; FinTech</span><span class="filter-count">264</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">Education</span><span class="filter-count">198</span></div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-title">Salary range</div>
+        <input type="range" class="salary-slider" min="0" max="150" value="80" oninput="updateSalary(this.value)">
+        <div class="salary-labels"><span>£0k</span><span id="salary-val">Up to £80k</span><span>£150k+</span></div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-title">EDI</div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox checked">✓</div><span class="filter-label">Salary shown</span><span class="filter-count">1,841</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">Flexibility stated</span><span class="filter-count">1,102</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">Disability Confident</span><span class="filter-count">432</span></div>
+        <div class="filter-option" onclick="toggleFilter(this)"><div class="filter-checkbox"></div><span class="filter-label">Living Wage employer</span><span class="filter-count">614</span></div>
+      </div>
+    </aside>
+
+    <div>
+      <div class="results-header">
+        <div class="results-count">48 roles <span>matching "Communications" · full remote · permanent</span></div>
+        <select class="sort-select">
+          <option>Most recent</option>
+          <option>Most relevant</option>
+          <option>Salary: high to low</option>
+          <option>Salary: low to high</option>
+        </select>
+      </div>
+      <div class="active-filters">
+        <div class="active-tag">Full remote ×</div>
+        <div class="active-tag">Permanent ×</div>
+        <div class="active-tag">Charity &amp; NGO ×</div>
+        <div class="active-tag">Salary shown ×</div>
+      </div>
+      <div class="jobs-list">
+        <a href="/job.html" class="job-card featured">
+          <div class="featured-label">⭐ Featured role</div>
+          <div class="job-card-row">
+            <div class="job-left">
+              <div class="job-logo job-logo-green">🌿</div>
+              <div class="job-info">
+                <div class="job-title">Head of Communications</div>
+                <div class="job-org">Whitley Fund for Nature</div>
+                <div class="job-tags"><span class="job-tag job-tag-green">Salary shown</span><span class="job-tag">Full remote</span><span class="job-tag">Permanent</span><span class="job-tag">Conservation</span></div>
+              </div>
+            </div>
+            <div class="job-right"><div class="job-salary">£55–65k</div><div class="job-badge badge-new">New today</div><div class="job-posted">Posted today</div></div>
+          </div>
+        </a>
+        <a href="/job.html" class="job-card">
+          <div class="job-card-row">
+            <div class="job-left">
+              <div class="job-logo job-logo-rust">🌊</div>
+              <div class="job-info">
+                <div class="job-title">Director of Communications</div>
+                <div class="job-org">WWF UK</div>
+                <div class="job-tags"><span class="job-tag job-tag-green">Salary shown</span><span class="job-tag">Full remote</span><span class="job-tag">Permanent</span><span class="job-tag">Environment</span></div>
+              </div>
+            </div>
+            <div class="job-right"><div class="job-salary">£60–72k</div><div class="job-badge badge-remote">Remote</div><div class="job-posted">2 days ago</div></div>
+          </div>
+        </a>
+        <a href="/job.html" class="job-card">
+          <div class="job-card-row">
+            <div class="job-left">
+              <div class="job-logo job-logo-warm">⚡</div>
+              <div class="job-info">
+                <div class="job-title">Senior Communications Manager</div>
+                <div class="job-org">Octopus Energy</div>
+                <div class="job-tags"><span class="job-tag job-tag-green">Salary shown</span><span class="job-tag">Hybrid</span><span class="job-tag">Permanent</span><span class="job-tag">CleanTech</span></div>
+              </div>
+            </div>
+            <div class="job-right"><div class="job-salary">£48–58k</div><div class="job-badge badge-flex">Hybrid</div><div class="job-posted">3 days ago</div></div>
+          </div>
+        </a>
+        <a href="/job.html" class="job-card">
+          <div class="job-card-row">
+            <div class="job-left">
+              <div class="job-logo job-logo-green">🎯</div>
+              <div class="job-info">
+                <div class="job-title">Head of Brand &amp; Content</div>
+                <div class="job-org">B Lab UK</div>
+                <div class="job-tags"><span class="job-tag job-tag-green">Salary shown</span><span class="job-tag">Full remote</span><span class="job-tag">4-day week</span><span class="job-tag">B Corp</span></div>
+              </div>
+            </div>
+            <div class="job-right"><div class="job-salary">£45–52k</div><div class="job-badge badge-remote">Remote</div><div class="job-posted">4 days ago</div></div>
+          </div>
+        </a>
+        <a href="/job.html" class="job-card">
+          <div class="job-card-row">
+            <div class="job-left">
+              <div class="job-logo job-logo-rust">🏛</div>
+              <div class="job-info">
+                <div class="job-title">Comms &amp; Campaigns Manager</div>
+                <div class="job-org">Shelter</div>
+                <div class="job-tags"><span class="job-tag job-tag-green">Salary shown</span><span class="job-tag">Full remote</span><span class="job-tag">Permanent</span><span class="job-tag">Housing</span></div>
+              </div>
+            </div>
+            <div class="job-right"><div class="job-salary">£38–44k</div><div class="job-badge badge-remote">Remote</div><div class="job-posted">5 days ago</div></div>
+          </div>
+        </a>
+        <a href="/job.html" class="job-card">
+          <div class="job-card-row">
+            <div class="job-left">
+              <div class="job-logo job-logo-warm">🌱</div>
+              <div class="job-info">
+                <div class="job-title">Content &amp; Communications Lead</div>
+                <div class="job-org">Rewilding Britain</div>
+                <div class="job-tags"><span class="job-tag job-tag-green">Salary shown</span><span class="job-tag">Full remote</span><span class="job-tag">Part-time option</span><span class="job-tag">Conservation</span></div>
+              </div>
+            </div>
+            <div class="job-right"><div class="job-salary">£34–40k</div><div class="job-badge badge-flex">Flexible</div><div class="job-posted">1 week ago</div></div>
+          </div>
+        </a>
+      </div>
+      <div class="pagination">
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <span class="page-dots">…</span>
+        <button class="page-btn">8</button>
+        <button class="page-btn">→</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <a href="/" class="footer-logo">We are Fl<span>ō</span>k</a>
+      <div class="footer-note">Remote &amp; flexible jobs across the UK · Free for job seekers · Always.</div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleFilter(el) {
+      const cb = el.querySelector('.filter-checkbox');
+      cb.classList.toggle('checked');
+      cb.textContent = cb.classList.contains('checked') ? '✓' : '';
+    }
+    function clearFilters() {
+      document.querySelectorAll('.filter-checkbox.checked').forEach(cb => {
+        cb.classList.remove('checked');
+        cb.textContent = '';
+      });
+    }
+    function updateSalary(val) {
+      document.getElementById('salary-val').textContent = 'Up to £' + val + 'k';
+    }
+  </script>
+</body>
+</html>
